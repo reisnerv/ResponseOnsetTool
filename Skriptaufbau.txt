@@ -1,0 +1,69 @@
+Vorschlag für den (groben) Aufbau eines Skripts:
+
+1.	File handling part 1
+
+2.	Input: 
+-	WAV-Dateien
+o	fs = sampling rate (Abtastrate): 44100 Datenpunkte pro s
+o	y = Datenpunkte (stereo in db): 79380 Datenpunkte; 1 Spalte = links, 2 Spalte = rechts
+-	(Signal besteht aus noise (>1000Hz) + Stimme (90-300Hz) oder nur noise)
+-	Loop über alle WAV-Dateien (~trials) eines Probanden (Ordner) getrennt nach localizer & main experiment
+
+3.	Funktion:
+-	Suche den Zeitpunkt im Zeitfenster von 350 bis 1800ms (Ende), an dem die Amplitude das erste Mal größer als 0.3 dB (Kriterium 1) UND/ODER die Frequenz kleiner als 1000Hz bzw. zw. 100-350Hz (Kriterium 2) ist
+
+4.	Output:
+-	XLS-file pro Proband mit 3 Spalten: 1. File name, 2. Verbale Reaktion vs. keine verbale Reaktion (s. Kriterien), 3. Reaktionszeit (NUR in files mit vocal response)
+-	Evtl. Plot zum Abgleich
+
+5.	File handling part 2
+
+
+
+
+Alternativer Weg "nur Frequenz":
+
+0. Definiere Frequenzkriterium für "es gibt eine responz"
+
+
+Schleife über alle Files im Ordner:
+1. Öffne file
+2. Beinhaltet wav-file eine response? Nein: -> fertig
+3. Fahre file in 0,0x-Sekunden-Abschnitten durch und begutachte einzelne Bruchstücke.
+4. Finde das Bruchstück, in dem zum ersten Mal das Stimmspektrum auftaucht.
+5. Gebe zeitpunkt als "response time" zurück
+6. schreibe ergebnisse in datei
+7. Done.
+
+
+###Ergäzung:###
+
+Festlegen eines Kriteriums:
+	- Stimmspektrum (100-300Hz) zw. 300-1800ms > selbige Frequenz zw. 0-300ms? -> responder
+
+Suchen des Onsets verbaler Reaktion in responder files:  
+	- 1.-2.
+	- Fahre file in 0,0x-Sekunden-Abschnitten durch und begutachte einzelne Bruchstücke
+	- Finde das Bruchstück, in dem das Stimmspektrum zum ersten Mal Amplitude von = 50 aufweist
+	- 5.-7.
+
+
+
+f_ana_single(1, 1000, 1600, [0, 500], [0,200], 'non_responder/momap_main_115_1_1_6')
+
+
+###Ergänzung2###
+
+A. Definition von 2 Kriterien zur Trennung von responder & non-responder Dateien:
+	1. Kriterium: Anteil (%, Integral, Summe, MW?) der Stimmfrequenz ab 300ms > Anteil der Stimmfrequenz (100-400Hz) bis 300ms
+	- Dadurch werden responder von non-responder (ohne Atmen) Dateien getrennt
+	- Enthalten können die gesuchte verbale Reaktion UND/ODER Atmen sein, aber auf jeden Fall Stimmspekrum
+	2. Kriterium: Peak Amplitude (dB) ab 300ms > 0.2
+	- Dadurch wird das Atmen von den verbalen Reaktionen getrennt (denn Atmen = max. 0.1 und verbale Reaktion = min. 0.3)
+
+B. Finden des Onsets der verbalen Reaktion
+	- Zerlege das file (ab 300ms) in 0.0x Schritten in kleine Bruchstücke, die das Frequenzspektrum beinhalten (FFT)
+	- Finde das Bruchstück, bei dem das Stimmsprektrum (Summe, MW?) zum ersten Mal die Amplitudenschwelle X überschreitet
+	- Schreibe diesen Zeitpunkt (ms oder s) in ein XLS-file
+
+Frage: würde für A. und B. ggf. auch nur die Amplitude reichen?
