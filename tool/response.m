@@ -1,4 +1,4 @@
-function [response, onset] = response(file, fig, filename)
+function [response, onset, m, avpeak, ratio, mpeak_w] = response(file, fig, filename)
 set_parameters;
 figure(fig);
 %assume negative case
@@ -38,6 +38,7 @@ while (loop_c == 1)
 end
         
 %mpeak_w = w(i,:)/fs;
+ratio = m/avpeak;
 
 if (avpeak*max_average_ratio) < m
     if (abs(round(mpeak_loc*fs) - length(data)) > 10) %
