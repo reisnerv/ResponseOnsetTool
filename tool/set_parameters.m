@@ -26,6 +26,8 @@ split = 1;
 %matlab for example)
 research = 0; %research mode is of for =0
 
+%Threshold, below which the file is marked as record error
+record_error_threshold = 0.001;
 
 %---------------------experimental parameters---------------------------
 

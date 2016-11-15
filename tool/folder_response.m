@@ -27,11 +27,11 @@ end
 
 loop = 1;
 process = 1;
-fprintf(filehandle,'%s\t  %s\t %s\t %s\t %s\t %s\t %s\t \n','file','response','onset', 'maxpeak', 'avgpeak', 'ratio', 'maxpeak_width');
+fprintf(filehandle,'%s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t \n','file','response','onset', 'maxpeak', 'mean_peak', 'ratio', 'maxpeak_width', 'mean_file');
 while (loop==1)
     file=strcat(filename,'/',directory(process).name);
-    [resp, ons, mpeak, avgpeak, ratio, mpeak_w] = response(file, process, directory(process).name); 
-    fprintf(filehandle,'%s\t  %s\t %s\t %s\t %s\t %s\t %s\t \n',directory(process).name,num2str(resp),num2str(ons), num2str(mpeak), num2str(avgpeak), num2str(ratio), num2str(mpeak_w));
+    [resp, ons, mpeak, avgpeak, ratio, mpeak_w, mean_data] = response(file, process, directory(process).name); 
+    fprintf(filehandle,'%s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t \n',directory(process).name,num2str(resp),num2str(ons), num2str(mpeak), num2str(avgpeak), num2str(ratio), num2str(mpeak_w), num2str(mean_data));
     if (research~=1)
         saveas(process, strcat(file, '.png'));
         close;

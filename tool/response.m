@@ -1,4 +1,4 @@
-function [response, onset, m, avpeak, ratio, mpeak_w] = response(file, fig, filename)
+function [response, onset, m, avpeak, ratio, mpeak_w, mean_data] = response(file, fig, filename)
 set_parameters;
 figure(fig);
 %assume negative case
@@ -47,8 +47,10 @@ if (avpeak*max_average_ratio) < m
     end
 end
 
-if (mean(data) < 0.01)
+mean_data = mean(data);
+if (mean_data < record_error_threshold)
     response = 99;
+    onset = 0;
 end
 
 %found a response, plot it against original and smoothed data:
