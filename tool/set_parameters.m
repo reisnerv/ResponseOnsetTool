@@ -27,7 +27,7 @@ split = 1;
 research = 0; %research mode is of for =0
 
 %Threshold, below which the file is marked as record error
-record_error_threshold = 0.001;
+record_error_threshold = 0.0005;
 
 %---------------------experimental parameters---------------------------
 
