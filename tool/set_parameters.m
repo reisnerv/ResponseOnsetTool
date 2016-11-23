@@ -14,6 +14,7 @@ sm_factor = 1555;
 %minimum distance two peaks must have to both be counted for the
 %peak-finding function, in seconds: best 0.x-0.1, but this value ist not
 %that important
+% NOT IN USE RIGHT NOW
 min_peak_dis = 0.05;
 
 %only use data starting from x, in milliseconds (1000 = one second)
@@ -27,7 +28,7 @@ split = 1;
 research = 0; %research mode is of for =0
 
 %Threshold, below which the file is marked as record error
-record_error_threshold = 0.0005;
+record_error_threshold = 0.005;
 
 %---------------------experimental parameters---------------------------
 

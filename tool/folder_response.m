@@ -1,23 +1,22 @@
-%example call: folder_response('./data/responder/');
-% The last / at the end of the filename is important!
-% For David: Why?
+%example call: folder_response('./data/responder');
+% No "/" at the end of the path is important!
 
-function folder_response(directory)
+function folder_response(directoryPath)
 
 % Preparation
 set_parameters;
 
 % Create list of .wav files to process
-filesList=dir(strcat(directory,'\*.wav'));
+filesList=dir(strcat(directoryPath,'/*.wav'));
 
 % Create folders to sort audiofiles into, if flag is set
 if (split)
-   mkdir(horzcat(directory, '/responder/'));
-   mkdir(horzcat(directory, '/non_responder/'));  
-   mkdir(horzcat(directory, '/record_error/'));
-   mkdir(horzcat(directory, '/responder/plots/'));
-   mkdir(horzcat(directory, '/non_responder/plots/'));  
-   mkdir(horzcat(directory, '/record_error/plots/'));
+   mkdir(horzcat(directoryPath, '/responder/'));
+   mkdir(horzcat(directoryPath, '/non_responder/'));  
+   mkdir(horzcat(directoryPath, '/record_error/'));
+   mkdir(horzcat(directoryPath, '/responder/plots/'));
+   mkdir(horzcat(directoryPath, '/non_responder/plots/'));  
+   mkdir(horzcat(directoryPath, '/record_error/plots/'));
 end
 
 % Create cell array with [resp, ons, mpeak, avgpeak, ratio, mpeak_w, mean_data]
@@ -26,7 +25,7 @@ resultsArray = cell(length(filesList), 8);
 for process = 1:length(filesList)
     
     % Get results from the audiofile specified in filePath
-    filePath=strcat(directory,'/',filesList(process).name);
+    filePath=strcat(directoryPath,'/',filesList(process).name);
     [resp, ons, mpeak, avgpeak, ratio, mpeak_w, mean_data] = response(filePath, process, filesList(process).name); 
     
     % Write data into table
@@ -50,23 +49,23 @@ for process = 1:length(filesList)
     if (split)
         
        if (resp==4)
-           copyfile(filePath, horzcat(directory,'/responder'), 'f');
+           copyfile(filePath, horzcat(directoryPath,'/responder'), 'f');
            if (research~=1)
-               movefile(strcat(filePath, '.png'), horzcat(directory,'/responder/plots'), 'f');
+               movefile(strcat(filePath, '.png'), horzcat(directoryPath,'/responder/plots'), 'f');
            end
        end
        
        if (resp==0)
-           copyfile(filePath, horzcat(directory,'/non_responder'), 'f');
+           copyfile(filePath, horzcat(directoryPath,'/non_responder'), 'f');
            if (research~=1)
-               movefile(strcat(filePath, '.png'), horzcat(directory,'/non_responder/plots'), 'f');
+               movefile(strcat(filePath, '.png'), horzcat(directoryPath,'/non_responder/plots'), 'f');
            end
        end
        
        if (resp==99)
-           copyfile(filePath, horzcat(directory,'/record_error'), 'f');
+           copyfile(filePath, horzcat(directoryPath,'/record_error'), 'f');
            if (research~=1)
-               movefile(strcat(filePath, '.png'), horzcat(directory,'/record_error/plots'), 'f');
+               movefile(strcat(filePath, '.png'), horzcat(directoryPath,'/record_error/plots'), 'f');
            end
            
        end
@@ -81,8 +80,8 @@ resultsTable = cell2table(resultsArray, 'VariableNames', {'Filename',...
                 'peakRatio', 'widthMaxPeak', 'meanDataValues'});
 
 % Create handle for output file
-outFileName = 'ResponseTime.xlsx';
-outFilePath=strcat(directory, outFileName);
+[~, outFileName, ~] = fileparts(directoryPath);
+outFilePath=strcat(directoryPath, '/',outFileName, '.xlsx');
 
 % Write table to output file
 writetable(resultsTable, outFilePath);
