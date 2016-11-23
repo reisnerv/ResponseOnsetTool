@@ -34,6 +34,10 @@ PLOTS = 1;
 MEAN_THRESHOLD = 0.005; %for the mean amplitude of the file
 MAXPEAK_THRESHOLD = 0.05; %for the highest peak
 
+%any peak closer than this to the end of the file will not be counted,
+%value in data points
+CUTOFF_POINT = 250;
+
 %---------------------experimental parameters---------------------------
 
 %adjusts the amount of peak width that is substracted from the position of

@@ -36,7 +36,7 @@ end
 ratio = m/avpeak;
 
 if (avpeak*max_average_ratio) < m
-    if (abs(round(mpeak_loc*fs) - length(data)) > 10) %
+    if (abs(round(mpeak_loc*fs) - length(data)) > CUTOFF_POINT) %
         response = 4;
         onset = mpeak_loc - mpeak_w*peak_w_adjust;
     end
