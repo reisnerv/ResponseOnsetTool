@@ -10,15 +10,11 @@ onset = 0.0;
 
 %Preprocessing
 data = abs(((wav(:,1)+ wav(:,2))/2))*scaling_factor;
-ts_data = (0:1/fs:(length(data)-1)/fs);
 
 %Smooth the data
-data_sm = smooth(data, sm_factor);
+smoothedData = smooth(data, sm_factor);
 
-data_fml = data_sm(round((t_low/1000)*fs):length(data_sm),:);
-%switch the out-commented line with the in-commented line if computation takes too long
-%[pks,locs,w, ~] = findpeaks(data_sm(round((t_low/1000)*fs):length(data_sm),:), 'MinPeakDistance', min_peak_dis);
-[pks,locs] = findpeaks(data_fml);
+[pks,locs] = findpeaks(smoothedData(round((t_low/1000)*fs):length(smoothedData),:));
 
 
 [m, i] = max(pks);
@@ -31,13 +27,12 @@ mpeak_w = 0;
 
 while (loop_c == 1)
     position = position - 10;
-    if (data_sm(position,:) < mean(data_sm))
+    if (smoothedData(position,:) < mean(smoothedData))
         mpeak_w = mpeak_loc - (position/fs);
         break;
     end
 end
         
-%mpeak_w = w(i,:)/fs;
 ratio = m/avpeak;
 
 if (avpeak*max_average_ratio) < m
@@ -47,24 +42,27 @@ if (avpeak*max_average_ratio) < m
     end
 end
 
+% Catch record errors
 mean_data = mean(data);
-if (mean_data < record_error_threshold)
+if (mean_data < MEAN_THRESHOLD) || (m < MAXPEAK_THRESHOLD)
     response = 99;
     onset = 0;
 end
 
-%found a response, plot it against original and smoothed data:
-together = horzcat(data, data_sm);
-plot(ts_data, together);
-title(filename, 'Interpreter', 'none')
-line([onset onset], [0 max(data)], 'Color', 'k', 'Linewidth', 1);
-line([mpeak_loc mpeak_loc], [0 max(data)], 'Color','c','Linewidth', 1);
-str = horzcat('onset at ', num2str(onset));
-dim = [.15 .6 .3 .3];
-annotation('textbox',dim,'String',str,'FitBoxToText','on', 'BackgroundColor', 'w');
-xlabel('time (s)');
-ylabel('dB');
-grid on;
-%dim = [.1 .3 .3 .3];
-%annotation('textbox',dim,'String',filename,'FitBoxToText','on');
+% found a response, plot it against original and smoothed data, if flag set
+if (PLOTS)
+    ts_data = (0:1/fs:(length(data)-1)/fs);
+    together = horzcat(data, smoothedData);
+    plot(ts_data, together);
+    title(filename, 'Interpreter', 'none')
+    line([onset onset], [0 max(data)], 'Color', 'k', 'Linewidth', 1);
+    line([mpeak_loc mpeak_loc], [0 max(data)], 'Color','c','Linewidth', 1);
+    str = horzcat('onset at ', num2str(onset));
+    dim = [.15 .6 .3 .3];
+    annotation('textbox',dim,'String',str,'FitBoxToText','on', 'BackgroundColor', 'w');
+    xlabel('time (s)');
+    ylabel('dB');
+    grid on;
+end
+
 end

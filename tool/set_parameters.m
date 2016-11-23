@@ -27,8 +27,12 @@ split = 1;
 %matlab for example)
 research = 0; %research mode is of for =0
 
+% Want plots?
+PLOTS = 1;
+
 %Threshold, below which the file is marked as record error
-record_error_threshold = 0.005;
+MEAN_THRESHOLD = 0.005;
+MAXPEAK_THRESHOLD = 0.05;
 
 %---------------------experimental parameters---------------------------
 

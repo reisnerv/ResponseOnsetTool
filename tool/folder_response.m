@@ -9,7 +9,7 @@ set_parameters;
 % Create list of .wav files to process
 filesList=dir(strcat(directoryPath,'/*.wav'));
 
-% Create folders to sort audiofiles into, if flag is set
+% Create folders to sort audiofiles and plots into, if split flag is set
 if (split)
    mkdir(horzcat(directoryPath, '/responder/'));
    mkdir(horzcat(directoryPath, '/non_responder/'));  
@@ -19,7 +19,7 @@ if (split)
    mkdir(horzcat(directoryPath, '/record_error/plots/'));
 end
 
-% Create cell array with [resp, ons, mpeak, avgpeak, ratio, mpeak_w, mean_data]
+% Create cell array to store data
 resultsArray = cell(length(filesList), 8);
 
 for process = 1:length(filesList)
@@ -38,9 +38,13 @@ for process = 1:length(filesList)
     resultsArray{process,7} = mpeak_w;
     resultsArray{process,8} = mean_data;
     
+    % Want plots?
+    if (PLOTS)
+        saveas(process, strcat(filePath, '.png'));
+    end
+    
     % Save plots as .png instead of keeping in Matlab, if flag set
     if (research~=1)
-        saveas(process, strcat(filePath, '.png'));
         close;
     end
     
@@ -50,21 +54,21 @@ for process = 1:length(filesList)
         
        if (resp==4)
            copyfile(filePath, horzcat(directoryPath,'/responder'), 'f');
-           if (research~=1)
+           if (PLOTS)
                movefile(strcat(filePath, '.png'), horzcat(directoryPath,'/responder/plots'), 'f');
            end
        end
        
        if (resp==0)
            copyfile(filePath, horzcat(directoryPath,'/non_responder'), 'f');
-           if (research~=1)
+           if (PLOTS)
                movefile(strcat(filePath, '.png'), horzcat(directoryPath,'/non_responder/plots'), 'f');
            end
        end
        
        if (resp==99)
            copyfile(filePath, horzcat(directoryPath,'/record_error'), 'f');
-           if (research~=1)
+           if (PLOTS)
                movefile(strcat(filePath, '.png'), horzcat(directoryPath,'/record_error/plots'), 'f');
            end
            
