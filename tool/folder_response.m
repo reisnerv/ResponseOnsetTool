@@ -1,5 +1,4 @@
-%example call: folder_response('./data/responder');
-% No "/" at the end of the path is important!
+%example call: folder_response('./data/responder')
 
 function folder_response(directoryPath)
 
@@ -84,7 +83,13 @@ resultsTable = cell2table(resultsArray, 'VariableNames', {'Filename',...
                 'peakRatio', 'widthMaxPeak', 'meanDataValues'});
 
 % Create handle for output file
-[~, outFileName, ~] = fileparts(directoryPath);
+[upperPath, outFileName, ~] = fileparts(directoryPath);
+
+% Account for user entering folder-path wrong
+if (isempty(outFileName))
+    [~, outFileName, ~] = fileparts(upperPath);
+end
+
 outFilePath=strcat(directoryPath, '/',outFileName, '.xlsx');
 
 % Write table to output file
