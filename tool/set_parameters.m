@@ -28,7 +28,7 @@ RESEARCH = 0; %research mode is of for =0
 PLOTS = 1;
 
 %Threshold, below which the file is marked as record error
-MEAN_THRESHOLD = 0.005; %for the mean amplitude of the file
+MEAN_THRESHOLD = 0.001; %for the mean amplitude of the file
 MAXPEAK_THRESHOLD = 0.05; %for the highest peak
 
 %any peak closer than this to the end of the file will not be counted,
