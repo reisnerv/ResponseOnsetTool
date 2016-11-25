@@ -59,7 +59,7 @@ if (PLOTS)
     dim = [.15 .6 .3 .3];
     annotation('textbox',dim,'String',str,'FitBoxToText','on', 'BackgroundColor', 'w');
     xlabel('time (s)');
-    ylabel('dB');
+    ylabel('amplitude (dB)');
     grid on;
 end
 
