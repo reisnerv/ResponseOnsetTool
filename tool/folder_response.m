@@ -6,10 +6,10 @@ function folder_response(directoryPath)
 set_parameters;
 
 % Create list of .wav files to process
-filesList=dir(strcat(directoryPath,'/*.wav'));
+filesList=dir(strcat(directoryPath,'/*',FILE_EXTENSION));
 
 % Create folders to sort audiofiles and plots into, if split flag is set
-if (split)
+if (SPLIT)
    mkdir(horzcat(directoryPath, '/responder/'));
    mkdir(horzcat(directoryPath, '/non_responder/'));  
    mkdir(horzcat(directoryPath, '/record_error/'));
@@ -43,13 +43,13 @@ for process = 1:length(filesList)
     end
     
     % Save plots as .png instead of keeping in Matlab, if flag set
-    if (research~=1)
+    if (RESEARCH~=1)
         close;
     end
     
     % Sorting of files into result-folders for easier checking of results,
     % if flag set
-    if (split)
+    if (SPLIT)
         
        if (resp==4)
            copyfile(filePath, horzcat(directoryPath,'/responder'), 'f');
@@ -80,7 +80,7 @@ end
 % Convert cell array to table
 resultsTable = cell2table(resultsArray, 'VariableNames', {'Filename',...
                       'Response', 'Onset', 'maxPeak', 'avgPeak', ...
-                'peakRatio', 'widthMaxPeak', 'meanDataValues'});
+                'peakRatio', 'widthMaxPeak', 'meanSmoothedDataValues'});
 
 % Create handle for output file
 [upperPath, outFileName, ~] = fileparts(directoryPath);

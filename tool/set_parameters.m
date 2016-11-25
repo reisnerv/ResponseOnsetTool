@@ -1,31 +1,28 @@
 %These parameters will be used in all other scripts, so treat them with
 %care:
 
+%File extension
+FILE_EXTENSION = '.wav';
+
 %amplify the raw signal by factor of
-scaling_factor = 2;
+SCALING_FACTOR = 2;
 
 %response peak has to be x times greater than the average peak to be
 %counted
-max_average_ratio = 3;
+MAX_AVERAGE_RATIO = 3;
 
 %smooth data via moving average of x points
-sm_factor = 1555;
-
-%minimum distance two peaks must have to both be counted for the
-%peak-finding function, in seconds: best 0.x-0.1, but this value ist not
-%that important
-% NOT IN USE RIGHT NOW
-min_peak_dis = 0.05;
+ROLLING_AVERAGE = 1555;
 
 %only use data starting from x, in milliseconds (1000 = one second)
-t_low = 350;
+T_LOW = 350;
 
 %split audio files into three folders "responder", "record_error" and "non-responder", 0 or 1
-split = 1;
+SPLIT = 1;
 
 %disable research mode to work faster (saves plots as jpg and not in
 %matlab for example)
-research = 0; %research mode is of for =0
+RESEARCH = 0; %research mode is of for =0
 
 % Want plots?
 PLOTS = 1;
@@ -42,4 +39,4 @@ CUTOFF_POINT = 250;
 
 %adjusts the amount of peak width that is substracted from the position of
 %the max peak to find its "beginning"
-peak_w_adjust = 1;
+PEAK_W_ADJUST = 1;

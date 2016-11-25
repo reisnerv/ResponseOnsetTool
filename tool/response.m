@@ -1,4 +1,4 @@
-function [response, onset, m, avpeak, ratio, mpeak_w, mean_data] = response(file, fig, filename)
+function [response, onset, m, avpeak, ratio, mpeak_w, smoothedMean] = response(file, fig, filename)
 set_parameters;
 figure(fig);
 %assume negative case
@@ -9,18 +9,20 @@ onset = 0.0;
 [wav, fs]=audioread(file);
 
 %Preprocessing
-data = abs(((wav(:,1)+ wav(:,2))/2))*scaling_factor;
+data = sum(abs(wav),2)*SCALING_FACTOR/size(wav,2);
 
 %Smooth the data
-smoothedData = smooth(data, sm_factor);
+smoothedData = smooth(data, ROLLING_AVERAGE);
+smoothedMean = mean(smoothedData);
 
-[pks,locs] = findpeaks(smoothedData(round((t_low/1000)*fs):length(smoothedData),:));
-
-
+% Get peaks, their location and the maximum
+[pks,locs] = findpeaks(smoothedData(round((T_LOW/1000)*fs):length(smoothedData),:));
 [m, i] = max(pks);
 avpeak = (sum(pks) - m)/(length(pks)-1);
-mpeak_loc = (t_low/1000)+locs(i,:)/fs;
+mpeak_loc = (T_LOW/1000)+locs(i,:)/fs;
+ratio = m/avpeak;
 
+% Find footpoint of maxpeak
 loop_c = 1;
 position = round(mpeak_loc*fs);
 mpeak_w = 0;
@@ -32,19 +34,16 @@ while (loop_c == 1)
         break;
     end
 end
-        
-ratio = m/avpeak;
 
-if (avpeak*max_average_ratio) < m
+if (avpeak*MAX_AVERAGE_RATIO) < m
     if (abs(round(mpeak_loc*fs) - length(data)) > CUTOFF_POINT) %
         response = 4;
-        onset = mpeak_loc - mpeak_w*peak_w_adjust;
+        onset = mpeak_loc - mpeak_w*PEAK_W_ADJUST;
     end
 end
 
 % Catch record errors
-mean_data = mean(data);
-if (mean_data < MEAN_THRESHOLD) || (m < MAXPEAK_THRESHOLD)
+if (smoothedMean < MEAN_THRESHOLD) || (m < MAXPEAK_THRESHOLD)
     response = 99;
     onset = 0;
 end
@@ -52,8 +51,7 @@ end
 % found a response, plot it against original and smoothed data, if flag set
 if (PLOTS)
     ts_data = (0:1/fs:(length(data)-1)/fs);
-    together = horzcat(data, smoothedData);
-    plot(ts_data, together);
+    plot(ts_data, horzcat(data, smoothedData));
     title(filename, 'Interpreter', 'none')
     line([onset onset], [0 max(data)], 'Color', 'k', 'Linewidth', 1);
     line([mpeak_loc mpeak_loc], [0 max(data)], 'Color','c','Linewidth', 1);
