@@ -19,7 +19,7 @@ Type that (with out the "") into the command line (next to the >>>) and press En
 3. Some important settings you can access via the file "set_parameters.m":
 
 PLOTS (=0,1)
-decides wether your wav-files are plotted and saved as .png in addition to the extraction of the response time. Highly encouraged, since it helps spots mistakes in the tool. Set to PLOT = 0; if you need to get results fast, ore are sure what you are doing.
+decides wether your wav-files are plotted and saved as .png in addition to the extraction of the response time. Highly encouraged, since it helps spots mistakes in the tool. Set to PLOT = 0; if you need to get results fast, or are sure what you are doing.
 
 SPLIT (=0,1)
 if set, the Tool creates three folders responder, non_responder and record_error and copies the files into the folder where it believes they belong. Disable for faster computation. Very helpful to check four mistakes afterward.
