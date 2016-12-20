@@ -35,6 +35,12 @@ MAXPEAK_THRESHOLD = 0.05; %for the highest peak
 %value in data points
 CUTOFF_POINT = 250;
 
+% Minimal width for the maxpeak
+MIN_MAXPEAK_WIDTH = 0.015;
+
+% Threshold for the max peak to be counted as a response
+AMP_THRESHOLD = 0.25;
+
 %---------------------experimental parameters---------------------------
 
 %adjusts the amount of peak width that is substracted from the position of

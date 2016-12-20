@@ -28,17 +28,23 @@ position = round(mpeak_loc*fs);
 mpeak_w = 0;
 
 while (loop_c == 1)
-    position = position - 10;
-    if (smoothedData(position,:) < mean(smoothedData))
+    if (position > 10)
+        position = position - 10;
+    else
+        break
+    end
+    if (smoothedData(position,:) < mean(smoothedData(1:position,:)))
         mpeak_w = mpeak_loc - (position/fs);
         break;
     end
 end
 
-if (avpeak*MAX_AVERAGE_RATIO) < m
-    if (abs(round(mpeak_loc*fs) - length(data)) > CUTOFF_POINT) %
-        response = 4;
-        onset = mpeak_loc - mpeak_w*PEAK_W_ADJUST;
+if (avpeak*MAX_AVERAGE_RATIO < m) && (mpeak_w > MIN_MAXPEAK_WIDTH)
+    if (abs(round(mpeak_loc*fs) - length(data)) > CUTOFF_POINT)
+        if (m > AMP_THRESHOLD)
+            response = 4;
+            onset = mpeak_loc - mpeak_w*PEAK_W_ADJUST;
+        end
     end
 end
 
@@ -54,6 +60,8 @@ if (PLOTS)
     plot(ts_data, horzcat(data, smoothedData));
     title(filename, 'Interpreter', 'none')
     line([onset onset], [0 max(data)], 'Color', 'k', 'Linewidth', 1);
+    line([0 length(data)], [smoothedMean smoothedMean], 'Color', 'r', 'Linewidth', 1);
+    line([0 length(data)], [m m], 'Color', 'r', 'Linewidth', 1);
     line([mpeak_loc mpeak_loc], [0 max(data)], 'Color','c','Linewidth', 1);
     str = horzcat('onset at ', num2str(onset));
     dim = [.15 .6 .3 .3];
