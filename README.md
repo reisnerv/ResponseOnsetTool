@@ -27,3 +27,8 @@ then minimal value the mean amplitude of a file must surpass, otherwise it will 
 
 The parameters file contains more parameters than those, for a complete overview open the file in Matlab. All parameters are accompanied by a description of what they get used for.
 "
+
+
+
+[![DOI](https://zenodo.org/badge/77639758.svg)](https://zenodo.org/badge/latestdoi/77639758)
+
